@@ -2,33 +2,42 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Built on Claude Code](https://img.shields.io/badge/Built%20on-Claude%20Code-black)](https://claude.ai/code)
-[![Made by a non-developer](https://img.shields.io/badge/made%20by-a%20non--developer-orange)](https://www.linkedin.com/in/eugenezhangco/)
+[![Open Source](https://img.shields.io/badge/open-source-brightgreen)](https://github.com/eugenezhangco-spec/athena)
 
-I saved 40 hours last week using an AI agent I built.
+**The open-source AI chief of staff that lives inside Claude Code.**
 
-I'm not a developer.
+Most AI forgets you the moment you close the tab. Athena doesn't.
 
-Athena is that agent, open sourced. Chief of staff. Life coach. Business mentor. Engineering team. One project that lives inside Claude Code.
+Chief of staff, life coach, business mentor, and a 14-person engineering team. One project. One memory. Runs on your Claude Pro or Max subscription. No extra API keys. No per-token billing. Your data stays on your machine.
 
-Runs on your own Claude Pro or Max subscription. No separate API keys. No per-token billing. Your machine.
-
-MIT. Free. Fork it, change it, ship it.
+MIT licensed.
 
 ---
 
-## What it actually does
+## What you get
+
+- **Stop re-explaining yourself.** Every conversation picks up where the last one ended. Forever.
+- **Stop paying per token.** Uses the models already in your Claude Pro or Max plan.
+- **An AI that pushes back.** Every idea gets stress-tested against your stated goals before you execute.
+- **Writing that sounds like you.** A 25-pattern humanizer kills AI patterns before you see a draft.
+- **Real software, shipped.** 14 specialist agents handle requirements, architecture, tests, security, and QA.
+- **Your data, your machine.** No cloud. No analytics. No telemetry. No vendor lock-in.
+
+---
+
+## What it does
 
 | You say | Athena does |
 |---|---|
-| "Good morning" | Today's calendar, urgent emails with drafts ready, yesterday's carryover. |
+| "Good morning" | Briefing lands. Today's calendar, urgent emails with drafts ready, yesterday's carryover. |
 | "Debrief" | 5-step close. Tomorrow seeded. |
-| "Bookmark this [link]" | Filed to your Notion, source auto-detected. |
-| "Brain dump: [3 ideas]" | Split into entries, tagged, filed. |
+| "Bookmark this [link]" | Filed to Notion. Source auto-detected. |
+| "Brain dump: [3 ideas]" | Split into entries. Tagged. Filed. |
 | *(receipt photo on Telegram)* | Merchant, amount, category extracted. Logged on your OK. |
-| "How much did I spend on food this month?" | Queries your expenses DB. Breakdown. Tax-deductible totals on request. |
+| "How much did I spend on food this month?" | Queries the expenses DB. Breakdown. Tax-deductible totals on request. |
 | "Read that file on my Desktop" | Reads it. No switching tools. |
 | "Screenshot [url] and send to Telegram" | Playwright captures. Bot sends the image. |
-| "Write me a LinkedIn post about X" | Drafts in your voice. 25-pattern humanizer before you see it. |
+| "Write me a LinkedIn post about X" | Drafts in your voice. Humanizer runs first. |
 | "Build me a [thing]" | 14 engineering specialists ship it. |
 
 ---
@@ -51,19 +60,7 @@ cd athena
 
 Open the folder in Claude Code or VS Code. Say hi.
 
-Athena detects you're new. Runs a 10-minute onboarding. Your goals, your schedule, your voice, your tools. No forms.
-
----
-
-## Why I built this
-
-I run a real 9-to-5 at a bank. I'm non-technical. I was drowning in context.
-
-Closed assistants forget between sessions. Raw API means per-token billing. Neither fit.
-
-So I built Athena on top of Claude Code. It uses the models already in your Pro or Max plan. Memory lives on your disk. The engineering team is 14 specialists that ship real code.
-
-Four months in, I still use it every day.
+Athena detects a new user and runs a 10-minute onboarding. Goals, schedule, voice, tools. No forms.
 
 ---
 
@@ -75,7 +72,7 @@ Four months in, I still use it every day.
 athena/
   .claude/rules/      Always-on behavior (personality, coaching, communication)
   .claude/skills/     On-demand capabilities (planning, debrief, writing, expenses, ...)
-  personal/           Who you are (gitignored)
+  personal/           User profile (gitignored, built during onboarding)
   agents/             14 engineering specialists
   bot/                Telegram bot (optional)
 ```
@@ -84,12 +81,10 @@ Claude Code. VS Code. Telegram. Morning briefing. Scheduled jobs. Same project. 
 
 ### Memory, four layers
 
-Most AI forgets the moment you close the tab. Athena doesn't.
-
 | Layer | What | When loaded |
 |---|---|---|
 | **MemPalace** (MCP) | Long-term vault. Facts, decisions, relationships, life events, with dates. Source-tagged. | On demand |
-| **personal/*.md** | You. Identity, goals, voice, patterns. | Always |
+| **personal/*.md** | Identity, goals, voice, patterns. | Always |
 | **snapshot.md** | Current state. This week. Active flags. | Every session |
 | **Bot SQLite** | Recent Telegram turns. Auto-decays. | Real-time |
 
@@ -127,27 +122,29 @@ In Claude Code, the 14 engineering agents pick their own models. Opus for strate
 
 ---
 
-## Coaching
+## Coaching engine
 
 Athena does not agree with everything. Every idea gets stress-tested.
 
-- **Signal-vs-noise filter.** Each new task checked against your goals. Flagged as signal, noise-dressed-as-signal, pure noise, or map-changer.
+- **Signal-vs-noise filter.** Each new task checked against stated goals. Flagged as signal, noise-dressed-as-signal, pure noise, or map-changer.
 - **Pattern detection.** Drift. Avoidance. Comfort-zone work. Overcommitting. Perfectionism. Planning-as-procrastination. Flagged by name.
 - **Business mentor lens.** Names the business model. Asks about the money. Challenges the GTM. Maps the other side's incentives.
 
-Warmer than most coaching. Sharper than most assistants.
+**What you get:** fewer wasted weeks. Fewer bad deals. Shorter decision cycles.
 
 ---
 
-## Writing
+## Writing engine
 
-Drafts emails, LinkedIn posts, messages in your voice. Not AI voice.
+Drafts emails, LinkedIn posts, and messages in your voice. Not AI voice.
 
 25-pattern detection filter from Wikipedia's "Signs of AI Writing" guide. Significance inflation. Hollow -ing constructions. Sycophantic openers. Synonym cycling. Em-dash overuse. Rule-of-three padding.
 
 Two-pass rewrite. Kill patterns. Audit for "obviously AI". Then you see it.
 
 Learns your voice during onboarding. Refines it every week.
+
+**What you get:** content that actually sounds like you. Posts that get read, not scrolled past.
 
 ---
 
@@ -172,9 +169,11 @@ Say "build me X" and 14 specialists activate.
 | Andre | Database Architect | Sonnet |
 | Rachel | Technical Writer | Haiku |
 
-You describe what you want in plain English. They handle requirements, research, architecture, tests, security review, QA, and docs. You get a working thing plus a plain-English explanation.
+Describe what you want in plain English. They handle requirements, research, architecture, tests, security review, QA, and docs. You get a working thing plus a plain-English explanation.
 
-Engineering Guardian runs every build. Catches hardcoded secrets, SQL injection, XSS, missing validation, exposed error details. Fixed. Explained after.
+Engineering Guardian runs every build. Catches hardcoded secrets, SQL injection, XSS, missing validation, exposed errors. Fixed. Explained after.
+
+**What you get:** production-quality software without a CS degree. Non-technical users ship real tools.
 
 ---
 
@@ -185,13 +184,13 @@ Engineering Guardian runs every build. Catches hardcoded secrets, SQL injection,
        Calendar. Urgent emails with draft replies. Yesterday's carryover.
 
 Through the day  Telegram for quick wins.
-                 Reminders. Calendar adds. Screenshots.
-                 "Bookmark this." "What's my next meeting?"
+                 Reminders. Calendar adds. Screenshots. Bookmarks.
+                 "What's my next meeting?"
                  "Read that file on my Desktop and summarize it."
 
 21:00  "Debrief" in Claude Code.
        What finished. Today's emails. Tomorrow's calendar.
-       Your reflection logged to diary plus patterns. Tomorrow seeded.
+       Reflection logged to diary plus patterns. Tomorrow seeded.
 ```
 
 ---
@@ -207,15 +206,17 @@ Athena writes its own upgrades.
 5. 8-point self-check after every meaningful session.
 6. Weekly compile. Raw memories into domain briefs. Career. Health. Relationships. Goals. Finances.
 
-Safety rails. Reads before writing. One change at a time. Security review on self-modification. No personality changes without your consent.
+Safety rails. Reads before writing. One change at a time. Security review on self-modification. No personality changes without consent.
+
+**What you get:** an assistant that gets sharper every week. Not a tool you outgrow.
 
 ---
 
 ## Privacy
 
-Your machine. No cloud. No analytics. No telemetry.
+Local by default. No cloud. No analytics. No telemetry.
 
-Credentials gitignored by default. Personal data never committed. Use a private GitHub repo if you want sync across machines.
+Credentials gitignored. Personal data never committed. Use a private GitHub repo if you want sync across machines.
 
 ---
 
@@ -227,7 +228,7 @@ Credentials gitignored by default. Personal data never committed. Use a private 
   skills/         On-demand capabilities
   hooks/          Session lifecycle
 
-personal/         Your data (gitignored, built during onboarding)
+personal/         User data (gitignored)
 agents/           14 engineering specialists
 bot/              TypeScript Telegram bot (Claude Agent SDK + SQLite + voice)
 bot/src/fs-mcp/   Filesystem MCP server (allowlist-enforced)
@@ -264,7 +265,7 @@ docs/             Setup, toolkit, playbook
 
 ## Contributing
 
-PRs welcome. Open an issue first for anything structural. Keep diffs small, describe the problem before the solution.
+PRs welcome. Open an issue first for anything structural. Keep diffs small. Describe the problem before the solution.
 
 ## License
 
@@ -272,6 +273,4 @@ MIT. See [LICENSE](LICENSE).
 
 ---
 
-Built by [Eugene Zhang](https://www.linkedin.com/in/eugenezhangco/). [Instagram](https://www.instagram.com/eugenezhang__/).
-
-Become the person AI works for. Not the person it replaces.
+Maintained by [Eugene Zhang](https://www.linkedin.com/in/eugenezhangco/).
