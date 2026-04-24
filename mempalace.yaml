@@ -1,0 +1,33 @@
+# MemPalace configuration for Athena (personal AI assistant)
+# This defines how the memory palace is organized for a life/business coaching use case.
+
+wing: athena_user
+description: "Personal assistant memory — life, career, relationships, goals"
+
+default_rooms:
+  - career        # Jobs, projects, business ventures, professional milestones
+  - health        # Physical health, fitness, mental health, habits
+  - relationships # People, family, partners, friends, professional contacts
+  - goals         # Active goals, targets, deadlines, progress
+  - finances      # Money, investments, expenses, runway, income streams
+  - identity      # Who the user is, values, beliefs, origin story
+  - daily-life    # Routines, preferences, timezone, logistics
+  - decisions     # Major life/business decisions and reasoning
+  - coaching      # Patterns detected, growth areas, accountability
+  - ideas         # Business ideas, side projects, explorations
+
+hall_keywords:
+  identity: [name, born, live, from, nationality, citizen, language]
+  emotions: [feel, stress, anxious, happy, frustrated, excited, worried, overwhelmed]
+  preferences: [prefer, always, never, like, hate, love, dislike, favorite]
+  technical: [code, build, deploy, api, database, framework, stack]
+  family: [mom, dad, parent, sibling, brother, sister, child, kid, family]
+  creative: [idea, concept, vision, dream, imagine, project]
+
+# Source tagging — every memory gets tagged with its origin
+source_tags:
+  user_statement: "Direct quote or paraphrase of what the user said"
+  system_inference: "Athena inferred this from context, not directly stated"
+  onboarding: "Captured during initial onboarding"
+  debrief: "Captured during end-of-day debrief"
+  coaching: "Captured during coaching/accountability session"

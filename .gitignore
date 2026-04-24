@@ -1,0 +1,37 @@
+.env
+.env.*
+*.credentials.json
+*.key
+*.pem
+*.p12
+*secret*
+tokens.json
+.mcp.json
+CLAUDE.local.md
+.claude/settings.local.json
+node_modules/
+*.tmp
+*.ogg
+*.log
+logs/
+bot/images/
+bot/sessions.json
+bot/store/*.db
+bot/store/*.db-shm
+bot/store/*.db-wal
+bot/store/*.pid
+personal/.onboard-state.json
+personal/.last-session
+
+# MemPalace entity data (regenerated at runtime, per-user)
+entities.json
+
+# Personal data (created during onboarding, never committed)
+personal/me.md
+personal/voice-dna.md
+personal/fitness.md
+personal/notion-databases.md
+personal/mission/
+personal/personal-life/relationships/
+personal/linkedin/
+.claude-personal/
