@@ -69,33 +69,13 @@ su - athena -c "cd /home/athena/athena/bot && npm install --silent"
 # --- Set up cron jobs ---
 echo "[7/7] Setting up cron jobs (sync + proactive scripts)..."
 
-# Server auto-sync script
-cat > /home/athena/server-sync.sh << 'SYNC'
-#!/bin/bash
-export PATH="/usr/bin:/usr/local/bin:$PATH"
-ATHENA_DIR="/home/athena/athena"
-cd "$ATHENA_DIR" || exit 1
-
-# Pull remote changes (from Mac/VS Code)
-git pull origin main --ff-only 2>/dev/null
-
-# Push local changes (from Telegram bot)
-if [ -n "$(git status --porcelain)" ]; then
-    TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
-    git add personal/ .claude/ decisions/ archives/ logs/
-    git add bot/reminders.json 2>/dev/null
-    if [ -n "$(git diff --cached --name-only)" ]; then
-        git commit -m "Auto-save (server) $TIMESTAMP"
-        git push origin main
-    fi
-fi
-SYNC
-chmod +x /home/athena/server-sync.sh
-chown athena:athena /home/athena/server-sync.sh
+# Auto-sync lives in the repo at scripts/auto-sync.sh — stash-safe rebase,
+# rebuild + pm2 reload on TypeScript source changes, no destructive resets.
+chmod +x /home/athena/athena/scripts/auto-sync.sh
 
 # Set up cron jobs for athena user
-CRON_CONTENT="# Athena auto-sync: every 60 seconds
-* * * * * /home/athena/server-sync.sh >> /tmp/athena-server-sync.log 2>&1
+CRON_CONTENT="# Athena auto-sync: every 60 seconds (stash-safe, rebuilds bot on TS changes)
+* * * * * bash /home/athena/athena/scripts/auto-sync.sh >> /tmp/athena-auto-sync.log 2>&1
 
 # Athena proactive scripts: run every hour, scripts check timezone internally
 0 * * * * cd /home/athena/athena && bash scripts/morning-briefing.sh >> /tmp/athena-morning-briefing.log 2>&1

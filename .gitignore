@@ -12,6 +12,8 @@ CLAUDE.local.md
 node_modules/
 *.tmp
 *.ogg
+*.mp3
+*.wav
 *.log
 logs/
 bot/images/
@@ -20,6 +22,7 @@ bot/store/*.db
 bot/store/*.db-shm
 bot/store/*.db-wal
 bot/store/*.pid
+audio.mp3
 personal/.onboard-state.json
 personal/.last-session
 

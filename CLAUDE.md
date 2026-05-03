@@ -75,6 +75,8 @@ Skills live in `.claude/skills/`. Each has a `SKILL.md` with trigger conditions.
 | `humanizer` | `/humanizer` or any request to rewrite text to not sound like AI |
 | `compile` | "Catch me up on [topic]", "summarize what you know about my [career/health]", or auto during weekly review |
 | `memory-audit` | "Audit memories", "check for contradictions", or auto during weekly review |
+| `council` | `/council`, "run the council on this", "stress-test this", "challenge this for me". Five adversarial subagents on a life/business decision. Not for technical builds. |
+| `transcribe` | URL drop (YouTube, Reels, TikTok, podcast), "transcribe this", "what does this video say", "summarize this clip". |
 | `bookmark` | "Save this link", "bookmark this", any URL the user wants to save (auto-detects source). Requires Notion wired up. |
 | `brain-dump` | "Brain dump", "capture this", "dump this" — stream-of-consciousness into Notion. Requires Notion wired up. |
 | `research` | "Save this research", "add to research", after `/deep-research`. Requires Notion wired up. |
