@@ -319,6 +319,52 @@ fi
 
 # Make hooks executable
 chmod +x "$SCRIPT_DIR"/.claude/hooks/*.sh 2>/dev/null && true
+chmod +x "$SCRIPT_DIR"/scripts/*.sh "$SCRIPT_DIR"/scripts/*.py 2>/dev/null && true
+
+# ── 6. Memory taxonomy guard ──────────────────────────
+# Locks the memory vocabulary at the write path. Without it the wing list is a
+# note in a file that background hooks never read, and the vocabulary sprawls
+# until nothing is findable. Optional — skipped silently if MemPalace is absent.
+echo ""
+echo -e "${BOLD}Memory guard${NC}"
+if command -v python3 &> /dev/null && [ -f "$SCRIPT_DIR/scripts/memory-guard.py" ]; then
+    if python3 "$SCRIPT_DIR/scripts/memory-guard.py" > /dev/null 2>&1; then
+        ok "Memory taxonomy locked (edit personal/memory-taxonomy.md to change it)"
+    else
+        warn "Memory guard not applied — MemPalace may not be installed yet"
+        warn "Re-run later:  python3 scripts/memory-guard.py"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+else
+    warn "Skipped memory guard (needs python3)"
+    WARNINGS=$((WARNINGS + 1))
+fi
+
+# ── 7. Setup report ───────────────────────────────────
+# Athena reads this on first run so she can REPORT the state of the machine
+# instead of interrogating you about it. Onboarding should be a conversation,
+# not a support ticket — every technical question asked in the chat is one the
+# script should already have answered.
+REPORT="$SCRIPT_DIR/personal/.setup-report.json"
+mkdir -p "$SCRIPT_DIR/personal"
+have() { command -v "$1" &> /dev/null && echo true || echo false; }
+mem=false
+if command -v mempalace-mcp &> /dev/null || python3 -c "import mempalace" 2>/dev/null; then
+    mem=true
+fi
+cat > "$REPORT" << REPORTEOF
+{
+  "ran_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "issues": $ISSUES,
+  "warnings": $WARNINGS,
+  "claude": $(have claude),
+  "node": $(have node),
+  "python3": $(have python3),
+  "memory_installed": $mem,
+  "mcp_config": $([ -f "$SCRIPT_DIR/.mcp.json" ] && echo true || echo false),
+  "bot_env": $([ -f "$SCRIPT_DIR/bot/.env" ] && echo true || echo false)
+}
+REPORTEOF
 
 # ── Summary ───────────────────────────────────────────
 echo ""

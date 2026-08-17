@@ -25,6 +25,17 @@ bot/store/*.pid
 audio.mp3
 personal/.onboard-state.json
 personal/.last-session
+personal/.setup-report.json
+
+# Your knowledge base. The structure and the protocol ship; what you put in
+# them is yours and never leaves your machine.
+knowledge/raw/*
+knowledge/wiki/*
+knowledge/questions/*
+knowledge/digests/*
+knowledge/_index.md
+knowledge/_hot.md
+!knowledge/**/.gitkeep
 
 # MemPalace entity data (regenerated at runtime, per-user)
 entities.json
@@ -38,3 +49,7 @@ personal/mission/
 personal/personal-life/relationships/
 personal/linkedin/
 .claude-personal/
+
+# Python bytecode
+__pycache__/
+*.pyc

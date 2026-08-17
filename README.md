@@ -79,18 +79,37 @@ athena/
 
 Claude Code. VS Code. Telegram. Morning briefing. Scheduled jobs. Same project. Same memory.
 
-### Memory, four layers
+### Memory, five layers
 
 | Layer | What | When loaded |
 |---|---|---|
 | **MemPalace** (MCP) | Long-term vault. Facts, decisions, relationships, life events, with dates. Source-tagged. | On demand |
+| **knowledge/** | The wiki. What you have concluded, rewritten as you learn more. | On demand |
 | **personal/*.md** | Identity, goals, voice, patterns. | Always |
 | **snapshot.md** | Current state. This week. Active flags. | Every session |
 | **Bot SQLite** | Recent Telegram turns. Auto-decays. | Real-time |
 
-Every fact is tagged `user_statement` (you said it) or `system_inference` (Athena concluded it). Conflicts resolve in your favor.
+Every fact is tagged `user_statement` (you said it) or `system_inference` (Athena concluded it). Conflicts resolve in your favour.
 
-Weekly audit catches contradictions, stale facts, duplicates, gaps. Memory gets cleaner over time, not messier.
+**The first two are different jobs and mixing them up is expensive.** MemPalace is recall: it answers "what did Sarah say in June." The wiki is synthesis: it answers "what do I actually know about pricing." A recall system will never produce understanding no matter how much you put in it, because it stores rather than reads. Both are needed. See [knowledge/CLAUDE.md](knowledge/CLAUDE.md).
+
+### Memory that does not rot
+
+A memory system does not crash when it goes wrong. It keeps answering, confidently, and the answers are quietly untrue. There is no error and no alert, so nothing will ever prompt you to look.
+
+Three layers stop that, and the order matters:
+
+```bash
+python3 scripts/memory-guard.py     # the gate: a locked vocabulary, enforced at the write path
+python3 scripts/memory-lint.py      # the lint: what rotted after — run monthly
+python3 scripts/wiki.py lint        # same idea, pointed at the wiki
+```
+
+The guard is the part most systems get wrong. Writing your approved categories into a rules file does not work, because background hooks file memories without ever reading your rules. **A rule is a note on the wall; the guard is a lock on the door** — it patches the write call so an off-vocabulary memory is rejected with the valid options handed back, and the assistant corrects itself.
+
+The lint catches what a gate cannot: a fact that was true in May, the same person stored twice under two spellings, two relationship names that mean the same thing. It backs up before touching anything, **expires rather than deletes** so history stays answerable, and refuses to guess where the answer is genuinely ambiguous — a lint that guessed would manufacture the exact errors it exists to catch.
+
+Edit `personal/memory-taxonomy.md` to fit your life, then re-run the guard.
 
 ### Tools (MCP)
 
@@ -214,9 +233,13 @@ Safety rails. Reads before writing. One change at a time. Security review on sel
 
 ## Privacy
 
-Local by default. No cloud. No analytics. No telemetry.
+Local by default. No cloud, no analytics, no telemetry. There is no server belonging to this project and no account to create.
 
-Credentials gitignored. Personal data never committed. Use a private GitHub repo if you want sync across machines.
+Everything you tell Athena lives in `personal/`, `~/.mempalace/`, and `knowledge/` on your own disk. Credentials are gitignored and personal data is never committed. Use a **private** repo if you want to sync across machines, and read `.gitignore` before you push anything.
+
+Your conversations do reach Anthropic, because Claude runs there. That is your own subscription and its terms, the same as any tool built on Claude Code.
+
+Full detail, including the optional Telegram bot and how to vet an MCP server before installing it: [SECURITY.md](SECURITY.md).
 
 ---
 
@@ -229,12 +252,23 @@ Credentials gitignored. Personal data never committed. Use a private GitHub repo
   hooks/          Session lifecycle
 
 personal/         User data (gitignored)
+knowledge/        The wiki. raw sources, topic pages, open questions
 agents/           14 engineering specialists
 bot/              TypeScript Telegram bot (Claude Agent SDK + SQLite + voice)
 bot/src/fs-mcp/   Filesystem MCP server (allowlist-enforced)
+scripts/          Setup, sync, scheduled jobs, memory hygiene
 decisions/        Decision log
 context/          STATUS.md, ACTION-ITEMS.md
 docs/             Setup, toolkit, playbook
+```
+
+Every script here carries a `--selftest`. A check with no self-test is a claim.
+
+```bash
+bash   scripts/cron-alert.sh   --selftest
+python3 scripts/memory-guard.py --selftest
+python3 scripts/memory-lint.py  --selftest
+cd bot && npm run typecheck && npm test
 ```
 
 ---
@@ -260,12 +294,17 @@ docs/             Setup, toolkit, playbook
 - [OVERVIEW.md](OVERVIEW.md). Deep architecture tour.
 - [docs/START-HERE.md](docs/START-HERE.md). Building mode and the engineering team.
 - [docs/PLAYBOOK.md](docs/PLAYBOOK.md), [docs/TEAM.md](docs/TEAM.md), [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+- [knowledge/CLAUDE.md](knowledge/CLAUDE.md). How the wiki works and why it is separate from memory.
+- [personal/memory-taxonomy.md](personal/memory-taxonomy.md). The memory vocabulary. Edit it to fit your life.
+- [SECURITY.md](SECURITY.md). What this touches and what to check before pushing.
 
 ---
 
 ## Contributing
 
-PRs welcome. Open an issue first for anything structural. Keep diffs small. Describe the problem before the solution.
+PRs welcome, and **you do not need to be a developer.** Most of this is markdown — a rule that reads better or a setup step that confused you is a real contribution.
+
+One change per PR. Describe the problem before the solution. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

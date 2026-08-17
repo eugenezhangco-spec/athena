@@ -72,17 +72,31 @@ echo "[7/7] Setting up cron jobs (sync + proactive scripts)..."
 # Auto-sync lives in the repo at scripts/auto-sync.sh — stash-safe rebase,
 # rebuild + pm2 reload on TypeScript source changes, no destructive resets.
 chmod +x /home/athena/athena/scripts/auto-sync.sh
+chmod +x /home/athena/athena/scripts/cron-run.sh /home/athena/athena/scripts/cron-alert.sh
 
-# Set up cron jobs for athena user
+# Every job runs through cron-run.sh, which messages you ONLY when a job fails.
+#
+# Without it a dead job has no symptom. These scripts are silent by design, so
+# "nothing needed you today" and "I crashed at 3am" look identical from your
+# phone, and you find out weeks later when you notice the briefings stopped.
+#
+# It will not flood you. cron-alert.sh deduplicates hard: at most two messages
+# per broken job, one when it breaks and one when it recovers. Auto-sync runs
+# every minute, so naked alerting would be thousands of messages a day, you
+# would mute the thread, and the next real alert would be invisible.
 CRON_CONTENT="# Athena auto-sync: every 60 seconds (stash-safe, rebuilds bot on TS changes)
-* * * * * bash /home/athena/athena/scripts/auto-sync.sh >> /tmp/athena-auto-sync.log 2>&1
+* * * * * /home/athena/athena/scripts/cron-run.sh auto-sync bash /home/athena/athena/scripts/auto-sync.sh >> /tmp/athena-auto-sync.log 2>&1
 
 # Athena proactive scripts: run every hour, scripts check timezone internally
-0 * * * * cd /home/athena/athena && bash scripts/morning-briefing.sh >> /tmp/athena-morning-briefing.log 2>&1
-0 * * * * cd /home/athena/athena && bash scripts/deadline-alert.sh >> /tmp/athena-deadline-alert.log 2>&1
-0 * * * * cd /home/athena/athena && bash scripts/calendar-gap.sh >> /tmp/athena-calendar-gap.log 2>&1
-0 */3 * * * cd /home/athena/athena && bash scripts/backlog-health.sh >> /tmp/athena-backlog-health.log 2>&1
-0 * * * 0 cd /home/athena/athena && bash scripts/weekly-digest.sh >> /tmp/athena-weekly-digest.log 2>&1
+0 * * * * cd /home/athena/athena && scripts/cron-run.sh morning-briefing bash scripts/morning-briefing.sh >> /tmp/athena-morning-briefing.log 2>&1
+0 * * * * cd /home/athena/athena && scripts/cron-run.sh deadline-alert bash scripts/deadline-alert.sh >> /tmp/athena-deadline-alert.log 2>&1
+0 * * * * cd /home/athena/athena && scripts/cron-run.sh calendar-gap bash scripts/calendar-gap.sh >> /tmp/athena-calendar-gap.log 2>&1
+0 */3 * * * cd /home/athena/athena && scripts/cron-run.sh backlog-health bash scripts/backlog-health.sh >> /tmp/athena-backlog-health.log 2>&1
+0 * * * 0 cd /home/athena/athena && scripts/cron-run.sh weekly-digest bash scripts/weekly-digest.sh >> /tmp/athena-weekly-digest.log 2>&1
+
+# Memory hygiene: report what has rotted, first of the month. Report only —
+# nothing is changed without you running it again with --fix.
+0 9 1 * * cd /home/athena/athena && scripts/cron-run.sh memory-lint python3 scripts/memory-lint.py >> /tmp/athena-memory-lint.log 2>&1
 "
 
 echo "$CRON_CONTENT" | crontab -u athena -
